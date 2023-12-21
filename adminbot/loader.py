@@ -1,7 +1,7 @@
 import logging
 import sys
 import config
-import sqlite3
+import aiosqlite
 from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
@@ -17,6 +17,3 @@ logging.basicConfig(
         logging.StreamHandler(sys.stdout)
     ]
 )
-
-connection = sqlite3.connect('my_database.db')
-cursor = connection.cursor()

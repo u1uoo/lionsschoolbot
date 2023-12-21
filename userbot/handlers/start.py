@@ -1,5 +1,6 @@
 import logging
 
+
 from messages.main import MESSAGES
 from aiogram.types import Message, CallbackQuery
 from aiogram.dispatcher.filters import Command
@@ -8,7 +9,8 @@ from keyboards.inline.main_menu import menu_main, hw_menu, support_menu
 from keyboards.default.main import start_menu
 from keyboards.inline.callback_data import menu_callback
 from states.main import MainStates
-from loader import dp, cursor, connection
+from loader import dp
+from utils.dbworkflow import get_homeworks
 
 logger = logging.getLogger(__name__)
 
@@ -60,9 +62,7 @@ async def hw(call: CallbackQuery, state: FSMContext):
         logger.info(
             f'User @{call.from_user.username} {call.from_user.full_name} (id: {call.from_user.id}) opened '
             f'/hw')
-        connection.commit()
-        cursor.execute('SELECT date, time, hometask FROM Users WHERE username = ?', (call.from_user.username,))
-        results = cursor.fetchall()
+        results = await get_homeworks(call.from_user.username)
         await call.message.delete()
         hw_messages = []
         if results:
